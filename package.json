@@ -6,17 +6,20 @@
     "preinstall": "npm install -g typings",
     "postinstall": "cd src && typings install"
   },
-  "dependencies": {},
+	"dependencies": {
+		"request": "^2.69.0"
+	},
   "devDependencies": {
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-if": "^2.0.0",
     "gulp-load-plugins": "*",
-    "gulp-run": "^1.6.12",
+		"gulp-shell": "^0.5.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-tslint": "4.1.2",
     "gulp-typescript": "^2.11.0",
     "gulp-uglify": "^1.5.2",
     "path-exists": "^2.1.0",
+		"request": "^2.69.0",
     "tslint": "*",
     "typescript": "*",
     "typings": "*"

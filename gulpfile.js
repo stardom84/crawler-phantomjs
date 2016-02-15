@@ -46,14 +46,13 @@ function tsSrc() {
 	var filesDest = "build";
 
 	var tsProject = plugins.typescript.createProject(filesRoot + '/tsconfig.json', {
-		typescript: require('typescript'),
-		outFile: 'server.js'
+		typescript: require('typescript')
 	});
 
 	return ts(filesRoot, filesDest, tsProject);
 }
 
-function casperjs(){
+function casperjs() {
 	return plugins.run('casperjs ./build/server.js').exec();
 }
 
@@ -68,7 +67,9 @@ function watch() {
 gulp.task('build', gulp.series(
 	tsSrc, watch
 ));
-gulp.task('casper', gulp.series(casperjs));
+gulp.task('casper', plugins.shell.task([
+	'node ./build/server.js'
+]));
 /**
  * Watches
  */

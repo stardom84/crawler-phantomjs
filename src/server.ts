@@ -1,25 +1,25 @@
-import exec = require('child_process');
+import express = require('express');
 import path = require('path');
-import request = require('request');
-import  fs = require('fs');
-import  url = require('url');
+import fs = require('fs');
 
-var download = (uri:string, filename:string, dest:string, callback:Function) => {
-	request.head(uri, (err:Object, res:Object) => {
-		request(uri)
-			.pipe(fs.createWriteStream(dest))
-			.on('close', callback);
-	});
-};
 
-var p = exec.exec('casperjs --web-security=no --output-encoding=UTF-8 ' + path.join(__dirname, 'casper.js'), {},
-	(err:Error, stdout:Buffer, stderr:Buffer)=> {
-		if (err) {
-			console.log(err);
-		}
+/**
+ * CasperJS*
+ */
 
-	});
+const spawn = require('child_process').spawn;
 
-p.stdout.on('data', function (data:any) {
-	console.log('node: ' + data.toString());
+var p = spawn('casperjs', [path.join(__dirname, 'casper.js')]);
+
+p.stdout.on('data', (data:any) => {
+	console.log('node data: ' + data.toString());
 });
+
+p.on('close', (data:any) => {
+	console.log('node close: ' + data.toString());
+});
+
+p.on('error', function (err:any) {
+	console.log('node error: ' + err.toString());
+});
+

@@ -36,10 +36,10 @@ casper.then(function () {
 	this.echo(this.getTitle());
 });
 
-casper.thenOpen('http://www.musinsa.com/index.php?m=street&_y=2015&uid=24934', function () {
-	console.log('Moved To /index.php?m=street&_y=2015&uid=24934 ...');
+casper.thenOpen('http://www.musinsa.com/index.php?m=street&_y=2015&uid=23526', function () {
+	console.log('Moved To /index.php?m=street&_y=2015&uid=23526 ...');
 	links = this.evaluate(getLinks);
-	this.download('http://image.musinsa.com/mfile_s01/_street_images/24934/street_56bda98075ed6.jpg', 'images/test.jpg');
+	this.download('http:' + links[0], 'images/test2.jpg');
 	this.echo(' - ' + links.join('\n - ')).exit();
 });
 

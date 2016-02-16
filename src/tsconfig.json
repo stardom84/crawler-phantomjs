@@ -8,7 +8,7 @@
 		"noImplicitAny": false
 	},
 	"fileGlobs": [
-		"*.ts",
+		"**/*.ts",
 		"typings/main.d.ts"
 	],
 	"exclude":[

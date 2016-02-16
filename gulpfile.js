@@ -1,7 +1,8 @@
 var gulp = require('gulp'),
 	plugins = require('gulp-load-plugins')();
 
-var path = require('path');
+var path = require('path'),
+	fork = require('child_process').fork;
 
 var pathExists = require('path-exists');
 
@@ -25,6 +26,44 @@ var env = {
 /**
  * Definitions
  */
+
+var app = {
+	instance: {},
+
+	path: 'build/server.js',
+
+	env: env,
+
+	start: function (callback) {
+		process.execArgv.push('--harmony');
+
+		app.instance = fork(app.path, {silent: true, env: app.env});
+		app.instance.stdout.pipe(process.stdout);
+		app.instance.stderr.pipe(process.stderr);
+
+		plugins.util.log(plugins.util.colors.cyan('Starting'), 'express server ( PID:', app.instance.pid, ')');
+
+		if (callback) callback();
+	},
+
+	stop: function (callback) {
+		if (app.instance.connected) {
+			app.instance.on('exit', function () {
+				plugins.util.log(plugins.util.colors.red('Stopping'), 'express server ( PID:', app.instance.pid, ')');
+				if (callback) callback();
+			});
+			return app.instance.kill('SIGINT');
+		}
+		if (callback) callback();
+	},
+
+	restart: function restart(event) {
+		gulp.series(
+			app.stop,
+			app.start
+		);
+	}
+};
 
 function ts(filesRoot, filesDest, project) {
 	var title = arguments.callee.caller.name;
@@ -52,12 +91,15 @@ function tsSrc() {
 	return ts(filesRoot, filesDest, tsProject);
 }
 
-function casperjs() {
-	return plugins.run('casperjs ./build/server.js').exec();
+function casper() {
+	return gulp.src('build/server.js', {read: false})
+		.pipe(plugins.shell([
+			'node <%= file.path %>'
+		]));
 }
 
 function watch() {
-	gulp.watch('src/*.{ts,css,html}', gulp.series(tsSrc));
+	gulp.watch('src/**/*.{ts}', gulp.series(tsSrc));
 }
 
 /**
@@ -67,9 +109,7 @@ function watch() {
 gulp.task('build', gulp.series(
 	tsSrc, watch
 ));
-gulp.task('casper', plugins.shell.task([
-	'node ./build/server.js'
-]));
+gulp.task('casper', gulp.series(casper));
 /**
  * Watches
  */

@@ -4,6 +4,33 @@ import fs = require('fs');
 
 
 /**
+ * MongoDB*
+ */
+
+var db = require('./config/db'),
+	StreetModel = require('./model/street-model');
+
+var streetModel = new StreetModel({
+	name: '김일구',
+	age: 33,
+	nationality: '한국',
+	location: '부천',
+	occupation: '백수',
+	height: 170,
+	weight: 90,
+	intro: '으흐으흐',
+	desc: '으흐으흐흐흐흐'
+});
+
+streetModel.save((err:any)=> {
+	if (err) {
+		throw err;
+	}
+	console.log('saved succesfully!');
+});
+
+
+/**
  * CasperJS*
  */
 

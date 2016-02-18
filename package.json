@@ -8,7 +8,9 @@
   },
 	"dependencies": {
 		"async": "^1.5.2",
+		"body-parser": "^1.15.0",
 		"jasmine-node": "^1.14.5",
+		"method-override": "^2.3.5",
 		"mongodb": "^2.1.7",
 		"mongoose": "^4.4.3",
 		"morgan": "^1.6.1",

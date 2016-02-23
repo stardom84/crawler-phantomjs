@@ -14,8 +14,7 @@ var streetModelSchema = new mongoose.Schema({
 		imageId: {type: mongoose.Schema.Types.ObjectId},
 		createdDate: {type: Date, default: Date.now},
 		modifiedDate: {type: Date, default: Date.now}
-	},
-	{collection: 'streetModel'});
+});
 
 streetModelSchema.index({imageId: 1});
 

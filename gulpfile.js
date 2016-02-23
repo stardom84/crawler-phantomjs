@@ -98,6 +98,11 @@ function casper() {
 		]));
 }
 
+function mongodb() {
+	return gulp.src(['D:/workspace/mongodb'])
+		.pipe(plugins.shell(['mongod --dbpath <%= file.path %>']));
+}
+
 function watch() {
 	gulp.watch('src/**/*.{ts}', gulp.series(tsSrc));
 }
@@ -110,6 +115,8 @@ gulp.task('build', gulp.series(
 	tsSrc, watch
 ));
 gulp.task('casper', gulp.series(casper));
+
+gulp.task('mongodb', gulp.series(mongodb));
 /**
  * Watches
  */

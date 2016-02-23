@@ -9,7 +9,7 @@ var casper = require('casper').create({
 		outputEncoding: 'UTF-8'
 	},
 	logLevel: 'debug',
-	verbose: false
+	verbose: true
 });
 
 function getLinks() {
@@ -20,7 +20,11 @@ function getLinks() {
 	});
 }
 
-casper.start('http://www.musinsa.com/index.php', () => {
+console.log('STARTING...');
+
+
+casper.start('http://www.musinsa.com/index.php', function () {
+	console.log('Initial Page Opened...');
 	this.fill('form[name="socialloginform"]', {
 		id: 'sawadee',
 		pw: 'sawadee1919'
@@ -28,13 +32,14 @@ casper.start('http://www.musinsa.com/index.php', () => {
 });
 
 casper.then(function () {
-	this.echo(this.getTitle());
+	console.log('Login Complete...');
 });
 
-casper.thenOpen('http://www.musinsa.com/index.php?m=street&_y=2015&uid=23526', () => {
+casper.thenOpen('http://www.musinsa.com/index.php?m=street&_y=2015&uid=23526', function () {
+	console.log('Moved To /index.php?m=street&_y=2015&uid=23526 ...');
 	links = this.evaluate(getLinks);
 	this.download('http:' + links[0], 'images/test2.jpg');
-	this.echo(' - ' + links.join('\n - ')).exit();
+	this.log(' - ' + links.join('\n - ')).exit();
 });
 
 

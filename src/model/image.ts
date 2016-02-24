@@ -5,6 +5,7 @@ var imageSchema = new mongoose.Schema({
 	path: {type: String, trim: true},
 	originalLink: {type: String, trim: true},
 	originalImgLink: {type: String, trim: true},
+	type: {type: String},
 	synced: {type: Boolean, default: false},
 	takenDate: {type: Date},
 	streetModelId: {type: mongoose.Schema.Types.ObjectId},

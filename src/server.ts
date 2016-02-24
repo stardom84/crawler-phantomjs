@@ -19,7 +19,15 @@ const spawn = require('child_process').spawn;
 var p = spawn('casperjs', [path.join(__dirname, 'casper.js')]);
 
 p.stdout.on('data', (data:any) => {
-	console.log('node data: ' + data.toString());
+	var stdout = data.toString(),
+		stdoutArray = stdout.split(' ');
+
+	/*if (stdoutArray[0] === '[JSON]') {
+	 console.log(JSON.stringify(stdout));
+	 }*/
+
+	console.log(stdout);
+
 	/*	var image = new Image({
 	 name: {type: String, trim: true, unique: true},
 	 path: {type: String, trim: true},

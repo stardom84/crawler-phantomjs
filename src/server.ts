@@ -18,31 +18,33 @@ const spawn = require('child_process').spawn;
 
 var p = spawn('casperjs', [path.join(__dirname, 'casper.js')]);
 
+var image;
+
 p.stdout.on('data', (data:any) => {
 	var stdout = data.toString(),
 		stdoutArray = stdout.split(' ');
 
-	/*if (stdoutArray[0] === '[JSON]') {
-	 console.log(JSON.stringify(stdout));
-	 }*/
+	if (stdoutArray[0] === '[JSON]') {
+		console.log(JSON.stringify(stdout));
+		image = new Image({
+			name: stdoutArray[4],
+			path: {type: String, trim: true},
+			originalLink: {type: String, trim: true},
+			originalImgLink: stdoutArray[3],
+			synced: true
+		});
+
+		image.save((err:any)=> {
+			if (err) {
+				throw err;
+			}
+			console.log('image' + stdoutArray[4] + 'saved succesfully!');
+		});
+	}
 
 	console.log(stdout);
 
-	/*	var image = new Image({
-	 name: {type: String, trim: true, unique: true},
-	 path: {type: String, trim: true},
-	 originalLink: {type: String, trim: true},
-	 originalImgLink: {type: String, trim: true},
-	 synced: Boolean,
-	 takenDate: {type: Date},
-	 });
 
-	 image.save((err:any)=> {
-	 if (err) {
-	 throw err;
-	 }
-	 console.log('saved succesfully!');
-	 });*/
 });
 
 p.on('close', (data:any) => {

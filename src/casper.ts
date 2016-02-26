@@ -1,6 +1,5 @@
-var utils = require('utils');
-var fs = require('fs');
 var links:string[];
+var utils = require('utils');
 var casper = require('casper').create({
 	pageSettings: {
 		userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36',
@@ -8,23 +7,13 @@ var casper = require('casper').create({
 		loadImages: false,
 		resourceTimeout: 240000,
 		timeout: 240000,
-		waitTimeout: 240000,
 		stepTimeout: 240000,
 		loadPlugins: false,
 		webSecurityEnabled: false,
-		outputEncoding: 'UTF-8',
-		clientScripts: ['../node_modules/jquey/dist/jquery.min.js']
+		outputEncoding: 'UTF-8'
 	},
 	logLevel: 'debug',
 	verbose: false
-});
-
-casper.options.onResourceReceived = function (C:any, response:any) {
-	// utils.dump(response.contentType);
-};
-
-casper.on('remote.message', function (msg:any) {
-	this.echo('remote message caught: ' + msg);
 });
 
 var setting = {
@@ -60,30 +49,14 @@ casper
 		links = this.evaluate(getLinks);
 	})
 	.then(function () {
-		var imgUrl:String;
+		var imgUrl:String,
+			imgName:String;
 		this.each(links, function (self:any, link:any) {
 			self.thenOpen(setting.startUrl + link, function () {
 				imgUrl = this.getElementAttribute('.snapImg img', 'src');
-				console.log('[JSON] image originalImgLink ', imgUrl);
-				var file;
-				this.waitFor(function () {
-					return this.evaluate(function () {
-						$.ajax({
-							async: false,
-							url: 'http:' + imgUrl,
-							success: function (data:any, status:any, xhr:any) {
-								utils.dump(status);
-								file = data;
-							}
-						});
-						return file;
-					});
-				}, function () {
-					fs.write('images/' + imgUrl.split('/').pop(), file);
-				});
-
-
-				// this.download('http:' + imgUrl, 'images/' + imgUrl.split('/').pop());
+				imgName = imgUrl.split('/').pop();
+				console.log('[JSON] image originalImgLink ', imgUrl, imgName);
+				this.download('http:' + imgUrl, 'images/' + imgName);
 			});
 		});
 	});

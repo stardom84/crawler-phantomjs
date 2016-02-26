@@ -8,7 +8,7 @@ import fs = require('fs');
  */
 
 var db = require('./config/db'),
-	Image = require('./model/street-model');
+	Image = require('./model/image');
 
 /**
  * CasperJS*

@@ -1,0 +1,5 @@
+interface ModelInterface {
+
+}
+
+export = ModelInterface;

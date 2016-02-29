@@ -32,8 +32,8 @@ function getLinks() {
 	});
 }
 
-console.log('STARTING...');
 
+console.log('STARTING...');
 
 casper
 	.start(setting.startUrl, function () {
@@ -54,6 +54,7 @@ casper
 		this.each(links, function (self:any, link:any) {
 			self.thenOpen(setting.startUrl + link, function () {
 				imgUrl = this.getElementAttribute('.snapImg img', 'src');
+				//imageModel.originalImgLink.set(imgUrl);
 				imgName = imgUrl.split('/').pop();
 				console.log('[JSON] image originalImgLink ', imgUrl, imgName);
 				this.download('http:' + imgUrl, 'images/' + imgName);

@@ -2,17 +2,6 @@ import express = require('express');
 import path = require('path');
 import fs = require('fs');
 
-import ImageModel = require('./casper/ImageModel');
-
-var imageModel = new ImageModel();
-imageModel.name = 'test2';
-var temp = imageModel.name;
-imageModel.path = 'test3';
-temp = imageModel.path;
-
-console.log(imageModel, imageModel.name);
-console.log(imageModel, imageModel.path);
-
 /**
  * MongoDB*
  */

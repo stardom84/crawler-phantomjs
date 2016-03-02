@@ -1,4 +1,7 @@
+//import ImageModel = require('./casper/ImageModel');
+
 var links:string[];
+//var imageModel = new ImageModel();
 var utils = require('utils');
 var casper = require('casper').create({
 	pageSettings: {

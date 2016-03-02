@@ -9,7 +9,8 @@ class ImageModel implements ImageModelInterface {
 	type:String;
 	synced:boolean;
 
-	constructor() {
+	constructor(name?:String) {
+		this.name = name;
 	};
 }
 

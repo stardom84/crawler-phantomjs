@@ -7,10 +7,6 @@
 		"removeComments": false,
 		"noImplicitAny": false
 	},
-	"fileGlobs": [
-		"**/*.ts",
-		"typings/main.d.ts"
-	],
 	"exclude":[
 		"typings/main",
 		"typings/browser",

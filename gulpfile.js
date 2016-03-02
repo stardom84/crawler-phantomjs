@@ -6,6 +6,10 @@ var path = require('path'),
 
 var pathExists = require('path-exists');
 
+var filesRoot = 'src';
+var filesDest = "build";
+
+
 process.env.NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
 process.env.PORT = process.env.PORT ? process.env.PORT : '8080';
 var env = {
@@ -65,9 +69,13 @@ var app = {
 	}
 };
 
-function ts(filesRoot, filesDest, project) {
+var filesGlob = [
+	"typings/main.d.ts"
+];
+
+function ts(filesRoot, filesDest, filesGlob, project) {
 	var title = arguments.callee.caller.name;
-	var result = project.src()
+	var result = project.src(filesGlob)
 		.pipe(plugins.tslint())
 		.pipe(plugins.tslint.report('verbose'))
 		.pipe(plugins.sourcemaps.init())
@@ -80,15 +88,13 @@ function ts(filesRoot, filesDest, project) {
 		.pipe(gulp.dest(filesDest))
 }
 
+var tsProject = plugins.typescript.createProject(filesRoot + '/tsconfig.json', {
+	typescript: require('typescript')
+});
+
 function tsSrc() {
-	var filesRoot = 'src';
-	var filesDest = "build";
-
-	var tsProject = plugins.typescript.createProject(filesRoot + '/tsconfig.json', {
-		typescript: require('typescript')
-	});
-
-	return ts(filesRoot, filesDest, tsProject);
+	console.log(filesGlob);
+	return ts(filesRoot, filesDest, filesGlob, tsProject);
 }
 
 function casper() {
@@ -104,7 +110,14 @@ function mongodb() {
 }
 
 function watch() {
-	gulp.watch('src/**/*.{ts}', gulp.series(tsSrc));
+	var watch = gulp.watch('src/**/*.ts', tsSrc);
+
+	watch.on('change', function (path, stats) {
+		console.log(path);
+
+		filesGlob.concat(path);
+		//gulp.parallel(tsSrc);
+	});
 }
 
 /**

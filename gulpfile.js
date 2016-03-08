@@ -69,17 +69,20 @@ var app = {
 	}
 };
 
-var filesGlob = [
-	"typings/main.d.ts"
+var files = [
+	"src/typings/main.d.ts"
 ];
 
-function ts(filesRoot, filesDest, filesGlob, project) {
+var changed = "src/typings/main.d.ts";
+
+function ts(filesRoot, filesDest, files, tsProject) {
 	var title = arguments.callee.caller.name;
-	var result = project.src(filesGlob)
+	console.log('compiling..', files.concat(changed));
+	var result = gulp.src(files.concat(changed))
 		.pipe(plugins.tslint())
 		.pipe(plugins.tslint.report('verbose'))
 		.pipe(plugins.sourcemaps.init())
-		.pipe(plugins.typescript(project));
+		.pipe(plugins.typescript(tsProject));
 	return result.js
 		.pipe(plugins.if(env.isProd, plugins.uglify()))
 		.pipe(plugins.if(env.isDev, plugins.sourcemaps.write({
@@ -88,13 +91,19 @@ function ts(filesRoot, filesDest, filesGlob, project) {
 		.pipe(gulp.dest(filesDest))
 }
 
-var tsProject = plugins.typescript.createProject(filesRoot + '/tsconfig.json', {
+var tsProject = plugins.typescript.createProject({
+	target: "ES5",
+	module: "commonjs",
+	emitDecoratorMetadata: true,
+	experimentalDecorators: true,
+	removeComments: false,
+	noImplicitAny: false,
 	typescript: require('typescript')
 });
 
 function tsSrc() {
-	console.log(filesGlob);
-	return ts(filesRoot, filesDest, filesGlob, tsProject);
+	console.log(files);
+	return ts(filesRoot, filesDest, files, tsProject);
 }
 
 function casper() {
@@ -113,9 +122,8 @@ function watch() {
 	var watch = gulp.watch('src/**/*.ts', tsSrc);
 
 	watch.on('change', function (path, stats) {
-		console.log(path);
-
-		filesGlob.concat(path);
+		console.log('----->', files, path);
+		changed = path;
 		//gulp.parallel(tsSrc);
 	});
 }

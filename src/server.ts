@@ -21,23 +21,19 @@ var image;
 
 p.stdout.on('data', (data:any) => {
 	var stdout = data.toString(),
-		stdoutArray = stdout.split(' ');
+		stdoutArray = stdout.split(' '),
+		result:Object;
 
 	if (stdoutArray[0] === '[JSON]') {
 		console.log(JSON.stringify(stdout));
-		image = new Image({
-			name: stdoutArray[4],
-			path: {type: String, trim: true},
-			originalLink: {type: String, trim: true},
-			originalImgLink: stdoutArray[3],
-			synced: true
-		});
+		result = JSON.parse(stdoutArray.pop());
+		image = new Image(result);
 
 		image.save((err:any)=> {
 			if (err) {
 				throw err;
 			}
-			console.log('image' + stdoutArray[4] + 'saved succesfully!');
+			console.log('image' + image.name + 'saved succesfully!');
 		});
 	}
 

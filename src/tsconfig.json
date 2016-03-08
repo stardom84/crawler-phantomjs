@@ -7,7 +7,7 @@
 		"removeComments": false,
 		"noImplicitAny": false
 	},
-	"exclude":[
+	"exclude": [
 		"typings/main",
 		"typings/browser",
 		"typings/browser.d.ts"

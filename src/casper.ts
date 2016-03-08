@@ -1,7 +1,8 @@
-//import ImageModel = require('./casper/ImageModel');
+import ImageModel = require('./casper/ImageModel');
+import CONFIG = require('./config/Config');
 
 var links:string[];
-//var imageModel = new ImageModel();
+var imageModel = new ImageModel();
 var utils = require('utils');
 var casper = require('casper').create({
 	pageSettings: {
@@ -35,8 +36,8 @@ function getLinks() {
 	});
 }
 
-
 console.log('STARTING...');
+
 
 casper
 	.start(setting.startUrl, function () {
@@ -53,14 +54,21 @@ casper
 	})
 	.then(function () {
 		var imgUrl:String,
-			imgName:String;
+			imgName:String,
+			imgPath:String;
 		this.each(links, function (self:any, link:any) {
 			self.thenOpen(setting.startUrl + link, function () {
 				imgUrl = this.getElementAttribute('.snapImg img', 'src');
-				//imageModel.originalImgLink.set(imgUrl);
 				imgName = imgUrl.split('/').pop();
-				console.log('[JSON] image originalImgLink ', imgUrl, imgName);
-				this.download('http:' + imgUrl, 'images/' + imgName);
+				imgPath = CONFIG.imageFolder + '/' + imgName;
+				this.download('http:' + imgUrl, imgPath);
+
+				imageModel.name = imgName;
+				imageModel.path = imgPath;
+				imageModel.originalLink = setting.startUrl + link;
+				imageModel.originalImgLink = imgUrl;
+
+				console.log('[JSON] imageModel', JSON.stringify(imageModel, null, 0));
 			});
 		});
 	});

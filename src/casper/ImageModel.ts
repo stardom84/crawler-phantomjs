@@ -1,6 +1,6 @@
 import ImageModelInterface = require('./interface/ImageModelInterface');
 
-class ImageModel implements ImageModelInterface {
+class ImageModel {
 	name:String;
 	path:String;
 	originalLink:String;
@@ -9,8 +9,7 @@ class ImageModel implements ImageModelInterface {
 	type:String;
 	synced:boolean;
 
-	constructor(name?:String) {
-		this.name = name;
+	constructor() {
 	};
 }
 
